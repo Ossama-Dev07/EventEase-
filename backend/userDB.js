@@ -7,7 +7,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/Authentification", { useNewUrlParser
   .catch(() => console.log("Connection failed"));
 
 const AuthentificationSchema = mongoose.Schema({
-  _id: Number, 
   email: { type: String, required: true },
   username: String,
   password: String,
