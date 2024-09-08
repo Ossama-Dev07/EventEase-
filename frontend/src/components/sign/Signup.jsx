@@ -20,8 +20,7 @@ export function Signup() {
     phone: "",
     password: "",
   });
-  const [error, setError] = useState(""); // State for error message
-  const [success, setSuccess] = useState(""); // State for success message
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,11 +34,17 @@ export function Signup() {
           console.log(res);
           
         });
+    setValues({
+      username: "",
+      email: "",
+      phone: "",
+      password: "",
+    });
     
   };
 
   return (
-    <Card className="mx-auto max-w-sm">
+    <Card className="lg:min-h-[300px]  xl:min-h-[500px]">
       <CardHeader>
         <CardTitle className="text-xl">Sign Up</CardTitle>
         <CardDescription>
@@ -55,6 +60,7 @@ export function Signup() {
                 id="username"
                 placeholder="Robinson"
                 required
+                value={values.username}
                 onChange={(e) =>
                   setValues({ ...values, username: e.target.value })
                 }
@@ -66,6 +72,7 @@ export function Signup() {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                value={values.email}
                 onChange={(e) =>
                   setValues({ ...values, email: e.target.value })
                 }
@@ -78,6 +85,7 @@ export function Signup() {
                 id="phone"
                 type="text"
                 placeholder="+212....."
+                value={values.phone}
                 onChange={(e) =>
                   setValues({ ...values, phone: e.target.value })
                 }
@@ -89,6 +97,7 @@ export function Signup() {
               <Input
                 id="password"
                 type={seepwd ? "text" : "password"}
+                value={values.password}
                 onChange={(e) =>
                   setValues({ ...values, password: e.target.value })
                 }
@@ -107,7 +116,6 @@ export function Signup() {
               Create an account
             </Button>
             {error && <div className="mt-4 text-red-500">{error}</div>}
-            {success && <div className="mt-4 text-green-500">{success}</div>}
           </div>
         </form>
         <Button variant="outline" className="w-full">

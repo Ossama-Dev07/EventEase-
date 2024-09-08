@@ -1,21 +1,24 @@
 const jwt = require('jsonwebtoken');
-const verifyToken = async function isAuthenticated (req, res,next) {        
-      if(!req.headers.authorization){
-        return res.status(403).send("A token is required for authentication");
-      }
-       const token = req.headers.authorization.split(' ')[1];
-       if (!token) {
-        return res.status(403).send("A token is required for authentication");
-        }
-       jwt.verify(token, "RANDOM_ACCESS_TOKEN",(err,donnesEnvoyes)=>
-       {
-        if(err){
-       
-            return res.status(401).json(err);
-       }else{
-            req.utilisateur=donnesEnvoyes;
-            next();
-       }
- });
+
+const verifyToken = async function isAuthenticated(req, res, next) {    
+  // Retrieve token from cookies
+  const token = req.cookies.token;
+
+  // Check if the token is present
+  if (!token) {
+    return res.status(403).send("A token is required for authentication");
+  }
+
+  // Verify the token
+  jwt.verify(token, "RANDOM_ACCESS_TOKEN", (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Invalid token" });
+    } else {
+      // Attach decoded user info (id, username, etc.) to the request object
+      req.utilisateur = decoded;
+      next();
+    }
+  });
 };
-   module.exports = verifyToken
+
+module.exports = verifyToken;
