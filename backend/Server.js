@@ -8,6 +8,8 @@ const app = express();
 const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 
+app.use(express.json());
+//config fot cookies and seesion 
 app.use(cookieParser());
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -26,8 +28,7 @@ app.use(session({
 }))
 
 
-app.use(express.json());
-
+//API for LOGIN and SIGNUP 
 app.post("/signup", async (req, res) => {
     try{
     const { email, username, password, phone } = req.body;
@@ -59,18 +60,29 @@ app.post("/login", async(req, res) => {
         res.status(404).json({ message:"Invalid password" })
     } else {
         const { _id: id, username } = userexist;
-    req.session.user = { id, username }; // Store user data in session
-    console.log('Session created:', req.session.user); // Debugging
+    req.session.user = { id, username,login:true };
     res.status(200).json({ message: "Logged in successfully" });
     }
 })
 app.get("/test", (req, res) => {
   console.log('Session created:', req.session.user)
 
-  const { id, username } = req.session.user;
-  res.json({ message: "User authenticated", id, username });
+  const { id, username,login } = req.session.user;
+  res.json({ message: "User authenticated", id, username,login });
 });
-
+app.get("/user", async (req, res) => {
+    if (req.session.user === undefined) {
+        console.log('in', req.session.user)
+        return console.log("sir di login")
+    }
+    console.log('out', req.session.user)
+    const { id, login } = await req.session.user;
+    const user = User.findOne({ _id:id })
+    .then((user) => res.status(200).json({ user: user, valid: login }))
+  .catch(() => {
+    res.status(500).json({ error: "An error occurred" });
+  });
+})
 
 
 app.listen(30084, () => console.log("User Services listening on port 30084"));

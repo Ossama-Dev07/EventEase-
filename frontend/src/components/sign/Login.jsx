@@ -11,10 +11,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
   const [seepwd, setSeepwd] = useState(false);
   const [error, setError] = useState();
+  const navigat = useNavigate()
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -23,13 +25,16 @@ export function Login() {
     e.preventDefault();
     axios
       .post("http://localhost:30084/login", values)
-      .then((res) => setError(res.data.message))
+      .then((res) => {console.log(res.data)
+      navigat("/")})
       .catch((res) => setError(res.response.data.message));
+    
+    
   };
   return (
     <Card className="lg:min-h-[300px]  xl:min-h-[500px]">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="text-2xl text-[#1565c0]">Login</CardTitle>
         <CardDescription>
           Enter your email below to login to your account
         </CardDescription>
@@ -76,7 +81,10 @@ export function Login() {
               </label>
             </div>
             {error && <span className="ml-4 text-red-500">*{error}</span>}
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full bg-[#1565c0] hover:bg-[#0e4e97]"
+            >
               Login
             </Button>
             <Button variant="outline" className="w-full">

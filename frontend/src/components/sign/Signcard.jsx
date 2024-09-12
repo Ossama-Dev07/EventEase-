@@ -2,19 +2,27 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Login } from "./Login";
 import Signup from "./Signup";
+import { useLocation } from "react-router-dom";
 
 
 
 export function Signcard() {
+  const location = useLocation()
+  const { type } = location.state || {};
+  
   return (
     <div className="w-full lg:grid lg:min-h-[500px] lg:grid-cols-2 xl:min-h-[700px] ">
       <div className="flex items-center justify-center">
-        <Tabs defaultValue="account" className="w-[400px] ">
+        <Tabs defaultValue={type} className="w-[400px] ">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Signup</TabsTrigger>
+            <TabsTrigger value="login" className="font-bold text-[#1565c0]">
+              Login
+            </TabsTrigger>
+            <TabsTrigger value="signup" className="font-bold text-[#1565c0] ">
+              Signup
+            </TabsTrigger>
           </TabsList>
-          <TabsContent value="login">
+          <TabsContent value="login" >
             <Login />
           </TabsContent>
           <TabsContent value="signup">

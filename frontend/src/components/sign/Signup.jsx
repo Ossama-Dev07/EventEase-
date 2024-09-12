@@ -46,7 +46,7 @@ export function Signup() {
   return (
     <Card className="lg:min-h-[300px]  xl:min-h-[500px]">
       <CardHeader>
-        <CardTitle className="text-xl">Sign Up</CardTitle>
+        <CardTitle className="text-2xl text-[#1565c0]">Sign Up</CardTitle>
         <CardDescription>
           Enter your information to create an account
         </CardDescription>
@@ -112,15 +112,16 @@ export function Signup() {
                 See password
               </label>
             </div>
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full bg-[#1565c0] hover:bg-[#0e4e97]"
+            >
               Create an account
             </Button>
             {error && <div className="mt-4 text-red-500">{error}</div>}
           </div>
         </form>
-        <Button variant="outline" className="w-full">
-          Sign up with GitHub
-        </Button>
+        <Button className=" mt-4 w-full ">Sign up with GitHub</Button>
         <div className="mt-4 text-center text-sm">
           Already have an account?{" "}
           <a href="#" className="underline">

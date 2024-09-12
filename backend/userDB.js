@@ -10,6 +10,7 @@ const AuthentificationSchema = mongoose.Schema({
   email: { type: String, required: true },
   username: String,
   password: String,
+  userimage:String,
   role: { type: String, default: "user" },
   phone:String,
   creatAt:{type:Date,default:Date.now()}

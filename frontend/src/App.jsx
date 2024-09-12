@@ -1,16 +1,13 @@
-import React from 'react'
-import Signup from "./components/sign/Signup";
-import { Login } from './components/sign/Login';
-import Test from './components/sign/Test';
-import { Signcard } from './components/sign/Signcard';
+import React from "react";
+import SideBar from "./components/SideBar";
 
-export default function App() {
+function App({ children }) {
   return (
-    <div>
-      {/* <Signup /> */}
-      {/* <Login /> */}
-      
-      <Signcard/>
+    <div className="App">
+      <SideBar />
+      {children}
     </div>
   );
 }
+
+export default App;
