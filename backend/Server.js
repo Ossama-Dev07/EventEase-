@@ -60,7 +60,7 @@ app.post("/login", async(req, res) => {
         res.status(404).json({ message:"Invalid password" })
     } else {
         const { _id: id, username } = userexist;
-    req.session.user = { id, username,login:true };
+    req.session.user =  { id, username,login:true };
     res.status(200).json({ message: "Logged in successfully" });
     }
 })
@@ -71,19 +71,38 @@ app.get("/test", (req, res) => {
   res.json({ message: "User authenticated", id, username,login });
 });
 app.get("/user", async (req, res) => {
+  try {
     if (req.session.user === undefined) {
-        console.log('in', req.session.user)
-        return console.log("sir di login")
+      console.log('User not logged in');
+      return res.status(401).json({ error: "User not logged in" });
     }
-    console.log('out', req.session.user)
-    const { id, login } = await req.session.user;
-    const user = User.findOne({ _id:id })
-    .then((user) => res.status(200).json({ user: user, valid: login }))
-  .catch(() => {
-    res.status(500).json({ error: "An error occurred" });
-  });
-})
 
+    console.log('Session user:', req.session.user);
+    const { id, login } = req.session.user;
+
+    const user = await User.findOne({ _id: id });
+
+    if (!user) {
+      console.log('User not found');
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ user, valid: login });
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).json({ error: "An error occurred" });
+  }
+});
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      return res.status(500).json({ error: "Failed to log out" });
+    }
+    res.clearCookie("connect.sid"); // Clear session cookie
+    res.status(200).json({ message: "Logged out successfully" });
+  });
+});
 
 app.listen(30084, () => console.log("User Services listening on port 30084"));
 

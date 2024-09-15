@@ -11,9 +11,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function Signup() {
   const [seepwd, setSeepwd] = useState(false);
+  const navigate=useNavigate()
   const [values, setValues] = useState({
     username: "",
     email: "",
@@ -28,7 +30,10 @@ export function Signup() {
         .post("http://localhost:30084/signup", values)
         .then((res) => {
           setError(res.data.error);
-          
+          navigate("/signcard", {
+            state: { type: "login" },
+            replace: false,
+          });
         })
         .catch((res) => {
           console.log(res);
@@ -40,6 +45,8 @@ export function Signup() {
       phone: "",
       password: "",
     });
+
+      
     
   };
 

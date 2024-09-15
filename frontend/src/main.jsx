@@ -12,6 +12,7 @@ import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
 import { Login } from "./components/sign/Login";
 import Signup from "./components/sign/Signup";
+import Profile from './components/Profile/Profile.jsx';
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -31,8 +32,7 @@ createRoot(document.getElementById("root")).render(
                   <Route path="/event" element={<Event />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/contact" element={<Contact />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/profile" element={<Profile />} />
                 </Routes>
               </App>
             }

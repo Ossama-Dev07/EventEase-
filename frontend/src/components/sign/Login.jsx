@@ -25,9 +25,14 @@ export function Login() {
     e.preventDefault();
     axios
       .post("http://localhost:30084/login", values)
-      .then((res) => {console.log(res.data)
-      navigat("/")})
+      .then((res) => {
+        console.log(res.data)
+        navigat("/")
+        // window.location.reload();
+      })
+      
       .catch((res) => setError(res.response.data.message));
+      
     
     
   };
