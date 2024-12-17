@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -9,33 +10,30 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../store/authStore"; // Update with correct path
 
 export function Login() {
   const [seepwd, setSeepwd] = useState(false);
-  const [error, setError] = useState();
-  const navigat = useNavigate()
+  const navigate = useNavigate();
+  const { login, error, isLoading } = useAuthStore();
+
   const [values, setValues] = useState({
     email: "",
     password: "",
   });
-  const Handlsubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:30084/login", values)
-      .then((res) => {
-        console.log(res.data)
-        navigat("/")
-        // window.location.reload();
-      })
-      
-      .catch((res) => setError(res.response.data.message));
-      
-    
-    
+    try {
+      await login(values);
+      navigate("/");
+    } catch (err) {
+      // Error handling is now managed by the store
+      console.error("Login error", err);
+    }
   };
+
   return (
     <Card className="lg:min-h-[300px]  xl:min-h-[500px]">
       <CardHeader>
@@ -46,7 +44,7 @@ export function Login() {
       </CardHeader>
 
       <CardContent>
-        <form action="" onSubmit={Handlsubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
@@ -88,9 +86,10 @@ export function Login() {
             {error && <span className="ml-4 text-red-500">*{error}</span>}
             <Button
               type="submit"
+              disabled={isLoading}
               className="w-full bg-[#1565c0] hover:bg-[#0e4e97]"
             >
-              Login
+              {isLoading ? "Logging in..." : "Login"}
             </Button>
             <Button variant="outline" className="w-full">
               Login with Google
@@ -99,11 +98,21 @@ export function Login() {
         </form>
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{" "}
-          <a href="#" className="underline">
+          <button
+            className="underline"
+            onClick={() =>
+              navigate("/signcard", {
+                state: { type: "signup" },
+                replace: false,
+              })
+            }
+          >
             Sign up
-          </a>
+          </button>
         </div>
       </CardContent>
     </Card>
   );
 }
+
+export default Login;

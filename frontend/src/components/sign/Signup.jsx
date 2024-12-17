@@ -10,44 +10,41 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../store/authStore";
 
 export function Signup() {
   const [seepwd, setSeepwd] = useState(false);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
+  const { signup, error, isLoading } = useAuthStore();
+
   const [values, setValues] = useState({
     username: "",
     email: "",
     phone: "",
     password: "",
   });
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      const response = await axios
-        .post("http://localhost:30084/signup", values)
-        .then((res) => {
-          setError(res.data.error);
-          navigate("/signcard", {
-            state: { type: "login" },
-            replace: false,
-          });
-        })
-        .catch((res) => {
-          console.log(res);
-          
-        });
-    setValues({
-      username: "",
-      email: "",
-      phone: "",
-      password: "",
-    });
+    try {
+      await signup(values);
+      navigate("/signcard", {
+        state: { type: "login" },
+        replace: false,
+      });
 
-      
-    
+      // Reset form
+      setValues({
+        username: "",
+        email: "",
+        phone: "",
+        password: "",
+      });
+    } catch (err) {
+      // Error handling is now managed by the store
+      console.error("Signup error", err);
+    }
   };
 
   return (
@@ -121,9 +118,10 @@ export function Signup() {
             </div>
             <Button
               type="submit"
+              disabled={isLoading}
               className="w-full bg-[#1565c0] hover:bg-[#0e4e97]"
             >
-              Create an account
+              {isLoading ? "Creating Account..." : "Create an account"}
             </Button>
             {error && <div className="mt-4 text-red-500">{error}</div>}
           </div>

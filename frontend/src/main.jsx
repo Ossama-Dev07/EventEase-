@@ -10,8 +10,7 @@ import Home from "./components/Home/Home";
 import Event from "./components/Events/Event";
 import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
-import { Login } from "./components/sign/Login";
-import Signup from "./components/sign/Signup";
+
 import Profile from './components/Profile/Profile.jsx';
 
 createRoot(document.getElementById("root")).render(
@@ -19,10 +18,8 @@ createRoot(document.getElementById("root")).render(
     <ThemeProvider>
       <Router>
         <Routes>
-          {/* Route without sidebar */}
           <Route path="/signcard" element={<Signcard />} />
 
-          {/* Routes with sidebar */}
           <Route
             path="/*"
             element={
@@ -35,6 +32,7 @@ createRoot(document.getElementById("root")).render(
                   <Route path="/profile" element={<Profile />} />
                 </Routes>
               </App>
+              //<App/>
             }
           />
         </Routes>

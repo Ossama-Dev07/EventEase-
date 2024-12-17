@@ -3,17 +3,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Login } from "./Login";
 import Signup from "./Signup";
 import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 
 
 export function Signcard() {
   const location = useLocation()
   const { type } = location.state || {};
-  
+  const [activeTab, setActiveTab] = useState(type || "login");
+  console.log("Location state type:", type);
+   useEffect(() => {
+     if (type) {
+       setActiveTab(type);
+     } else {
+       setActiveTab("login"); 
+     }
+   }, [type]);
   return (
     <div className="w-full lg:grid lg:min-h-[500px] lg:grid-cols-2 xl:min-h-[700px] ">
       <div className="flex items-center justify-center">
-        <Tabs defaultValue={type} className="w-[400px] ">
+        <Tabs value={activeTab} onValueChange={setActiveTab}className="w-[400px] ">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login" className="font-bold text-[#1565c0]">
               Login

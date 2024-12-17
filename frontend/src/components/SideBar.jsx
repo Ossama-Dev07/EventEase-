@@ -13,9 +13,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Menu from "./Profile/Menu";
 import logoL from "../assets/logoL.png";
 import logoD from "../assets/logoD.png";
-import { useTheme } from "@/components/theme-provider";
 
+import { Moon, Sun } from "lucide-react";
+
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useTheme } from "@/components/theme-provider";
 function SideBar() {
+  const { setTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -46,15 +56,16 @@ function SideBar() {
       const res = await axios.get("http://localhost:30084/user");
       setUserData(res.data.user);
       setLogged(res.data.valid);
+      
     } catch (err) {
       console.error("Error fetching data:", err);
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchData();
+    
     const handleResize = () => window.innerWidth >= 960 && setOpenNav(false);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -88,19 +99,20 @@ function SideBar() {
         variant="small"
         color="blue-gray"
         className={`flex items-center gap-x-2 p-1 font-medium ${
-          theme === "light" ? "text-gray-800" : "text-gray-200"
+          theme === "light" ? "text-black" : "text-gray-200"
         }`}
       >
         <Link to="/" className={navItemClasses("/")}>
           Home
         </Link>
       </Typography>
+
       <Typography
         as="li"
         variant="small"
         color="blue-gray"
         className={`flex items-center gap-x-2 p-1 font-medium ${
-          theme === "light" ? "text-gray-800" : "text-gray-200"
+          theme === "light" ? "text-black" : "text-gray-200"
         }`}
       >
         <Link to="/event" className={navItemClasses("/event")}>
@@ -112,7 +124,7 @@ function SideBar() {
         variant="small"
         color="blue-gray"
         className={`flex items-center gap-x-2 p-1 font-medium ${
-          theme === "light" ? "text-gray-800" : "text-gray-200"
+          theme === "light" ? "text-black" : "text-gray-200"
         }`}
       >
         <Link to="/about" className={navItemClasses("/about")}>
@@ -124,7 +136,7 @@ function SideBar() {
         variant="small"
         color="blue-gray"
         className={`flex items-center gap-x-2 p-1 font-medium ${
-          theme === "light" ? "text-gray-800" : "text-gray-200"
+          theme === "light" ? "text-black" : "text-gray-200"
         }`}
       >
         <Link to="/contact" className={navItemClasses("/contact")}>
@@ -141,24 +153,22 @@ function SideBar() {
       <Button
         variant="text"
         size="sm"
-        className={`hidden lg:inline-block ${
-          theme === "light" ? "text-gray-900" : "text-gray-100"
+        className={`lg:inline-block ${
+          theme === "light" ? "text-black" : "text-gray-100"
         }`}
         onClick={handleLogin}
       >
         <span>Log In</span>
       </Button>
       <Button
-        variant="gradient"
         size="sm"
-        className={`hidden lg:inline-block`}
+        className={`lg:inline-block bg-blue-500 `}
         onClick={handleSignup}
       >
         <span>Sign up</span>
       </Button>
     </div>
   );
-
   const renderAuthSection = () => {
     if (loading) {
       return (
@@ -175,7 +185,7 @@ function SideBar() {
   };
 
   return (
-    <Navbar className="fixed top-0 z-50 w-full border-transparent bg-inherit max-w-screen-3xl px-4 py-2 lg:px-8 lg:py-4">
+    <Navbar className="fixed top-0 z-50 w-full border-transparent bg-inherit max-w-screen-3xl px-4 py-2 lg:px-6 lg:py-3">
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/" className="mr-4 cursor-pointer text-lg flex items-center">
           <img
@@ -185,7 +195,7 @@ function SideBar() {
           />
           <div
             className={`ml-2 ${
-              theme === "light" ? "text-gray-900" : "text-gray-100"
+              theme === "light" ? "text-black" : "text-gray-100"
             }`}
           >
             <span className="text-blue-500">E</span>vent
@@ -207,7 +217,7 @@ function SideBar() {
               fill="none"
               className="h-6 w-6"
               viewBox="0 0 24 24"
-              stroke="currentColor"
+              stroke={`${theme === "light" ? "black" : "white"}`}
               strokeWidth={2}
             >
               <path
@@ -219,9 +229,9 @@ function SideBar() {
           ) : (
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
+              className="h-6 w-6 "
               fill="none"
-              stroke="currentColor"
+              stroke={`${theme === "light" ? "black" : "white"}`}
               strokeWidth={2}
             >
               <path
@@ -232,6 +242,26 @@ function SideBar() {
             </svg>
           )}
         </IconButton>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button  size="icon">
+              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+              Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>
+              Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              System
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <MobileNav open={openNav}>
         <div className="container mx-auto">
