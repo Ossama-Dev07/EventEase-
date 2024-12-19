@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Card,
   CardContent,
@@ -11,72 +11,65 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../../store/authStore";
-
-export function Signup() {
+import useAuthStore from "../../../store/authStore"; 
+import { RecoveryContext } from "../../../main";
+import axios from "axios";
+export function Login() {
   const [seepwd, setSeepwd] = useState(false);
   const navigate = useNavigate();
-  const { signup, error, isLoading } = useAuthStore();
+  const { login, error, isLoading } = useAuthStore();
+const { setEmail, setPage, email, setOTP } = useContext(RecoveryContext);
+  function nagigateToOtp() {
+    if (values.email) {
+      const OTP = Math.floor(Math.random() * 9000 + 1000);
+      console.log("otp", OTP);
+      setOTP(OTP);
 
+      axios
+        .post("http://localhost:30084/send_recovery_email", {
+          OTP,
+          recipient_email: values.email,
+        })
+        .then(() => setPage("otp"))
+        .catch(console.log);
+      return;
+    }
+    return alert("Please enter your email");
+  }
   const [values, setValues] = useState({
-    username: "",
     email: "",
-    phone: "",
     password: "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await signup(values);
-      navigate("/signcard", {
-        state: { type: "login" },
-        replace: false,
-      });
-
-      // Reset form
-      setValues({
-        username: "",
-        email: "",
-        phone: "",
-        password: "",
-      });
+      await login(values);
+      navigate("/");
     } catch (err) {
       // Error handling is now managed by the store
-      console.error("Signup error", err);
+      console.error("Login error", err);
     }
   };
 
   return (
     <Card className="lg:min-h-[300px]  xl:min-h-[500px]">
       <CardHeader>
-        <CardTitle className="text-2xl text-[#1565c0]">Sign Up</CardTitle>
+        <CardTitle className="text-2xl text-[#1565c0]">Login</CardTitle>
         <CardDescription>
-          Enter your information to create an account
+          Enter your email below to login to your account
         </CardDescription>
       </CardHeader>
+
       <CardContent>
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                placeholder="Robinson"
-                required
-                value={values.username}
-                onChange={(e) =>
-                  setValues({ ...values, username: e.target.value })
-                }
-              />
-            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="m@example.com"
-                value={values.email}
                 onChange={(e) =>
                   setValues({ ...values, email: e.target.value })
                 }
@@ -84,27 +77,23 @@ export function Signup() {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="phone">Phone</Label>
-              <Input
-                id="phone"
-                type="text"
-                placeholder="+212....."
-                value={values.phone}
-                onChange={(e) =>
-                  setValues({ ...values, phone: e.target.value })
-                }
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
+              <div className="flex items-center">
+                <Label htmlFor="password">Password</Label>
+                <a
+                  href="#"
+                  onClick={() => nagigateToOtp()}
+                  className="ml-auto inline-block text-sm underline"
+                >
+                  Forgot your password?
+                </a>
+              </div>
               <Input
                 id="password"
                 type={seepwd ? "text" : "password"}
-                value={values.password}
                 onChange={(e) =>
                   setValues({ ...values, password: e.target.value })
                 }
+                required
               />
             </div>
             <div className="flex items-center space-x-2">
@@ -116,26 +105,36 @@ export function Signup() {
                 See password
               </label>
             </div>
+            {error && <span className="ml-4 text-red-500">*{error}</span>}
             <Button
               type="submit"
               disabled={isLoading}
               className="w-full bg-[#1565c0] hover:bg-[#0e4e97]"
             >
-              {isLoading ? "Creating Account..." : "Create an account"}
+              {isLoading ? "Logging in..." : "Login"}
             </Button>
-            {error && <div className="mt-4 text-red-500">{error}</div>}
+            <Button variant="outline" className="w-full">
+              Login with Google
+            </Button>
           </div>
         </form>
-        <Button className=" mt-4 w-full ">Sign up with GitHub</Button>
         <div className="mt-4 text-center text-sm">
-          Already have an account?{" "}
-          <a href="#" className="underline">
-            Sign in
-          </a>
+          Don&apos;t have an account?{" "}
+          <button
+            className="underline"
+            onClick={() =>
+              navigate("/signcard", {
+                state: { type: "signup" },
+                replace: false,
+              })
+            }
+          >
+            Sign up
+          </button>
         </div>
       </CardContent>
     </Card>
   );
 }
 
-export default Signup;
+export default Login;

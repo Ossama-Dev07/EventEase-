@@ -1,25 +1,47 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+// main.jsx
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
 import { ThemeProvider } from "@material-tailwind/react";
-import React from "react";
+import React, { createContext, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Signcard } from "./components/sign/Signcard";
 import Home from "./components/Home/Home";
 import Event from "./components/Events/Event";
 import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
+import Profile from "./components/Profile/Profile";
+import App from "./App";
 
-import Profile from './components/Profile/Profile.jsx';
+export const RecoveryContext = createContext();
+
+function RecoveryProvider({ children }) {
+  const [page, setPage] = useState("login");
+  const [email, setEmail] = useState();
+  const [otp, setOTP] = useState();
+
+  return (
+    <RecoveryContext.Provider
+      value={{ page, setPage, otp, setOTP, setEmail, email }}
+    >
+      {children}
+    </RecoveryContext.Provider>
+  );
+}
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
       <Router>
         <Routes>
-          <Route path="/signcard" element={<Signcard />} />
-
+          <Route
+            path="/signcard"
+            element={
+              <RecoveryProvider>
+                <Signcard />
+              </RecoveryProvider>
+            }
+          />
           <Route
             path="/*"
             element={
@@ -32,7 +54,6 @@ createRoot(document.getElementById("root")).render(
                   <Route path="/profile" element={<Profile />} />
                 </Routes>
               </App>
-              //<App/>
             }
           />
         </Routes>
