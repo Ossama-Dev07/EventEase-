@@ -166,10 +166,10 @@ app.put("/user", upload.single('image'), async (req, res) => {
 });
 ////////////////////////////////////////////////////////
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*")
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*")
+//   next();
+// });
 
 function sendEmail({ recipient_email, OTP }) {
   return new Promise((resolve, reject) => {

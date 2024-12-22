@@ -4,7 +4,7 @@ import { Login } from "./login/Login";
 import Signup from "./signup/Signup";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import { RecoveryContext } from "../../main"; // adjust path as needed
+import { RecoveryContext } from "../../main"; 
 import OTPInput from "./login/OTPInput";
 import Reset from "./login/Reset";
 import Recovered from "./login/Recovered";
@@ -30,6 +30,7 @@ export function Signcard() {
     if (page === "recovered") return <Recovered />;
     return null;
   }
+  
 
   return (
     <div className="w-full lg:grid lg:min-h-[500px] lg:grid-cols-2 xl:min-h-[700px]">
@@ -65,7 +66,7 @@ export function Signcard() {
         <img
           src="./Image.png"
           alt="Image"
-          className="w-full h-full object-cover dark:brightness-[0.2] dark:grayscale"
+          className="w-full h-full object-cover "
         />
       </div>
     </div>

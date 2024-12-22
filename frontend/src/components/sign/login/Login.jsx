@@ -11,14 +11,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../../../store/authStore"; 
+import useAuthStore from "../../../store/authStore";
 import { RecoveryContext } from "../../../main";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+
 export function Login() {
   const [seepwd, setSeepwd] = useState(false);
   const navigate = useNavigate();
   const { login, error, isLoading } = useAuthStore();
-const { setEmail, setPage, email, setOTP } = useContext(RecoveryContext);
+  const { setEmail, setPage, email, setOTP } = useContext(RecoveryContext);
+
   function nagigateToOtp() {
     if (values.email) {
       const OTP = Math.floor(Math.random() * 9000 + 1000);
@@ -34,7 +37,7 @@ const { setEmail, setPage, email, setOTP } = useContext(RecoveryContext);
         .catch(console.log);
       return;
     }
-    return alert("Please enter your email");
+    return toast.error("Please enter your email");
   }
   const [values, setValues] = useState({
     email: "",
@@ -47,13 +50,14 @@ const { setEmail, setPage, email, setOTP } = useContext(RecoveryContext);
       await login(values);
       navigate("/");
     } catch (err) {
-      // Error handling is now managed by the store
+      
       console.error("Login error", err);
     }
   };
 
   return (
     <Card className="lg:min-h-[300px]  xl:min-h-[500px]">
+      <ToastContainer/>
       <CardHeader>
         <CardTitle className="text-2xl text-[#1565c0]">Login</CardTitle>
         <CardDescription>
@@ -80,7 +84,6 @@ const { setEmail, setPage, email, setOTP } = useContext(RecoveryContext);
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <a
-                  href="#"
                   onClick={() => nagigateToOtp()}
                   className="ml-auto inline-block text-sm underline"
                 >
