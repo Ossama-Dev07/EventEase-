@@ -21,7 +21,7 @@ export function Login() {
   const navigate = useNavigate();
   const { login, error, isLoading } = useAuthStore();
   const { setEmail, setPage, email, setOTP } = useContext(RecoveryContext);
-
+  
   function nagigateToOtp() {
     if (values.email) {
       const OTP = Math.floor(Math.random() * 9000 + 1000);
@@ -34,7 +34,7 @@ export function Login() {
           recipient_email: values.email,
         })
         .then(() => setPage("otp"))
-        .catch(console.log);
+        .catch((error) => toast.error(error.response.data));
       return;
     }
     return toast.error("Please enter your email");

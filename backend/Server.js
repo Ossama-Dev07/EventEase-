@@ -56,7 +56,6 @@ app.post("/signup", async (req, res) => {
 });
 app.post("/login", async(req, res) => {
   const { email, password } = req.body;
-  const userexist =await User.findOne({ email: email })
   if (!userexist) {
     return res.status(404).json({message:"user not exist"})
   }
@@ -171,7 +170,11 @@ app.put("/user", upload.single('image'), async (req, res) => {
 //   next();
 // });
 
-function sendEmail({ recipient_email, OTP }) {
+async function  sendEmail({ recipient_email, OTP }) {
+  const userexist = await User.findOne({ email: email })
+  if (!userexist) {
+    return res.status(404).json({message:"email not exist"})
+  }
   return new Promise((resolve, reject) => {
     var transporter = nodemailer.createTransport({
       service: "gmail",
@@ -232,6 +235,7 @@ app.post("/send_recovery_email", (req, res) => {
     .then((response) => res.send(response.message))
     .catch((error) => res.status(500).send(error.message));
 });
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*")
   next();
