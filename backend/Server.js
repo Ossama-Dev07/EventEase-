@@ -56,6 +56,7 @@ app.post("/signup", async (req, res) => {
 });
 app.post("/login", async(req, res) => {
   const { email, password } = req.body;
+  const userexist = await User.findOne({ email: email })
   if (!userexist) {
     return res.status(404).json({message:"user not exist"})
   }
@@ -171,10 +172,10 @@ app.put("/user", upload.single('image'), async (req, res) => {
 // });
 
 async function  sendEmail({ recipient_email, OTP }) {
-  const userexist = await User.findOne({ email: email })
-  if (!userexist) {
-    return res.status(404).json({message:"email not exist"})
-  }
+  // const userexist = await User.findOne({ email: email })
+  // if (!userexist) {
+  //   return res.status(404).json({message:"email not exist"})
+  // }
   return new Promise((resolve, reject) => {
     var transporter = nodemailer.createTransport({
       service: "gmail",

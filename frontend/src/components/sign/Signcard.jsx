@@ -8,6 +8,8 @@ import { RecoveryContext } from "../../main";
 import OTPInput from "./login/OTPInput";
 import Reset from "./login/Reset";
 import Recovered from "./login/Recovered";
+import VerifyEmail from "./passowordRecovery/VerifyEmail";
+import { ToastContainer, toast } from "react-toastify";
 
 export function Signcard() {
   const location = useLocation();
@@ -23,8 +25,9 @@ export function Signcard() {
     }
   }, [type]);
 
-  // Recovery flow component
+  console.log("hellllo"+page)
   function RecoveryComponents() {
+    if(page==="verifyEmail") return <VerifyEmail /> 
     if (page === "otp") return <OTPInput />;
     if (page === "reset") return <Reset />;
     if (page === "recovered") return <Recovered />;
@@ -35,6 +38,7 @@ export function Signcard() {
   return (
     <div className="w-full lg:grid lg:min-h-[500px] lg:grid-cols-2 xl:min-h-[700px]">
       <div className="flex items-center justify-center">
+      <ToastContainer />
         {page === "login" ? (
           <Tabs
             value={activeTab}

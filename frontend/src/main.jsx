@@ -12,6 +12,7 @@ import About from "./components/About/About";
 import Contact from "./components/Contact/Contact";
 import Profile from "./components/Profile/Profile";
 import App from "./App";
+import VerifyEmail from "./components/sign/passowordRecovery/VerifyEmail";
 
 export const RecoveryContext = createContext();
 
@@ -50,6 +51,7 @@ createRoot(document.getElementById("root")).render(
                   <Route path="/" element={<Home />} />
                   <Route path="/event" element={<Event />} />
                   <Route path="/about" element={<About />} />
+                  {/* <Route path="/recoveryPassword" element={<VerifyEmail />} /> */}
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/profile" element={<Profile />} />
                 </Routes>

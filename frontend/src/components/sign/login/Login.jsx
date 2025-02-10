@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useNavigate } from "react-router-dom";
+import { Link, Route, useNavigate } from "react-router-dom";
 import useAuthStore from "../../../store/authStore";
 import { RecoveryContext } from "../../../main";
 import axios from "axios";
@@ -22,23 +22,6 @@ export function Login() {
   const { login, error, isLoading } = useAuthStore();
   const { setEmail, setPage, email, setOTP } = useContext(RecoveryContext);
   
-  function nagigateToOtp() {
-    if (values.email) {
-      const OTP = Math.floor(Math.random() * 9000 + 1000);
-      console.log("otp", OTP);
-      setOTP(OTP);
-
-      axios
-        .post("http://localhost:30084/send_recovery_email", {
-          OTP,
-          recipient_email: values.email,
-        })
-        .then(() => setPage("otp"))
-        .catch((error) => toast.error(error.response.data));
-      return;
-    }
-    return toast.error("Please enter your email");
-  }
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -57,7 +40,7 @@ export function Login() {
 
   return (
     <Card className="lg:min-h-[300px]  xl:min-h-[500px]">
-      <ToastContainer/>
+      <ToastContainer />
       <CardHeader>
         <CardTitle className="text-2xl text-[#1565c0]">Login</CardTitle>
         <CardDescription>
@@ -84,7 +67,8 @@ export function Login() {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <a
-                  onClick={() => nagigateToOtp()}
+                  to="/recoveryPassword"
+                  onClick={() => setPage("verifyEmail")}
                   className="ml-auto inline-block text-sm underline"
                 >
                   Forgot your password?
