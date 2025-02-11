@@ -14,6 +14,20 @@ export default function Reset() {
   const notifysuccess = (message) => toast.success(message);
   const notifyerror = (message) => toast.error(message);
   function changePassword() {
+console.log(confirmPassword);
+
+    // axios
+    //   .post("http://localhost:5000/send_recovery_email", {
+    //     OTP: otp,
+    //     recipient_email: email,
+    //     newpassword: confirmPassword,
+    //   })
+    //   .then(() => {
+    //     setDisable(true);
+    //     setTimer(60);
+    //     notifysuccess("A new OTP has successfully been sent to your email.");
+    //   })
+    //   .catch(console.log);
     if (!password || !confirmPassword) {
       notifyerror("Please fill in all fields");
       return;

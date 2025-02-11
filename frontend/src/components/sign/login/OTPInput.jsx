@@ -24,6 +24,7 @@ export default function OTPVerification() {
       .post("http://localhost:5000/send_recovery_email", {
         OTP: otp,
         recipient_email: email,
+        
       })
       .then(() => {
         setDisable(true);
