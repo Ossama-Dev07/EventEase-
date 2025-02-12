@@ -172,10 +172,10 @@ app.put("/user", upload.single('image'), async (req, res) => {
 // });
 
 async function  sendEmail({ recipient_email, OTP }) {
-  const userexist = await User.findOne({ email: recipient_email })
-  if (!userexist) {
-    return res.status(404).json({data:"email not exist"})
-  }
+  // const userexist = await User.findOne({ email: recipient_email })
+  // if (!userexist) {
+  //   return res.status(404).json({data:"email not exist"})
+  // }
   return new Promise((resolve, reject) => {
     var transporter = nodemailer.createTransport({
       service: "gmail",
@@ -229,30 +229,23 @@ async function  sendEmail({ recipient_email, OTP }) {
 
 
 
-app.post("/send_recovery_email", async (req, res) => {
-  
-   try {
-    const emailSent = await sendEmail(req.body); 
+app.post("/send_recovery_email", (req, res) => {
+  sendEmail(req.body)
+    .then((response) => res.send(response.message))
+    .catch((error) => res.status(500).send(error.message));
+});
+app.post('/reset_password', async (req, res) => {
+  try {
+    const { email, newpassword } = req.body;
 
-    if (emailSent) {
-      const { recipient_email, newPassword } = req.body;
+    const hashedPassword = await bcrypt.hash(newpassword, 10);
+     updated=await User.updateOne({ email }, { $set: { password: hashedPassword } });
 
-      
-      const user = await User.findOne({ email: recipient_email });
-      if (!user) {
-        return res.status(404).json({ success: false, message: "User not found" });
-      }
+    res.json({ message: "Password updated successfully" });
 
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      user.password = hashedPassword;
-      await user.save();
-
-      console.log("Email sent successfully & password reset");
-      return res.status(200).json({ success: true, message: "Password reset successfully" });
-    }
   } catch (error) {
-    console.error("Error sending email or resetting password:", error.message);
-    return res.status(500).json({ success: false, message: error.message });
+    console.error("Error updating password:", error);
+    res.status(500).json({ error: "An error occurred" });
   }
 });
 

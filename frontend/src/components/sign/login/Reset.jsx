@@ -2,9 +2,10 @@ import React, { useContext, useState } from "react";
 import { RecoveryContext } from "../../../main";
 import { Eye, EyeOff } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 export default function Reset() {
-  const { setPage } = useContext(RecoveryContext);
+  const { setPage, email } = useContext(RecoveryContext);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
@@ -13,21 +14,8 @@ export default function Reset() {
 
   const notifysuccess = (message) => toast.success(message);
   const notifyerror = (message) => toast.error(message);
-  function changePassword() {
-console.log(confirmPassword);
 
-    // axios
-    //   .post("http://localhost:5000/send_recovery_email", {
-    //     OTP: otp,
-    //     recipient_email: email,
-    //     newpassword: confirmPassword,
-    //   })
-    //   .then(() => {
-    //     setDisable(true);
-    //     setTimer(60);
-    //     notifysuccess("A new OTP has successfully been sent to your email.");
-    //   })
-    //   .catch(console.log);
+  function changePassword() {
     if (!password || !confirmPassword) {
       notifyerror("Please fill in all fields");
       return;
@@ -42,8 +30,18 @@ console.log(confirmPassword);
       notifyerror("Please accept the Terms and Conditions");
       return;
     }
-    notifysuccess("password changed successfully");
-    setPage("recovered");
+    
+
+    axios
+      .post("http://localhost:30084/reset_password", {
+        recipient_email: email,
+        newpassword: confirmPassword,
+      })
+      .then(() => {
+        notifysuccess("password changed successfully");
+        setPage("recovered");
+      })
+      .catch((error) => notifyerror(error));
   }
 
   return (

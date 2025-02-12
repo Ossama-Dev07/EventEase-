@@ -14,7 +14,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 
 export default function VerifyEmail() {
-  const [emailInput, setEmailInput] = useState(""); // Correct usage of useState
+  const [emailInput, setEmailInput] = useState("");
   const { setEmail, setPage, setOTP } = useContext(RecoveryContext);
 const notifysuccess = (message) => toast.success(message);
   const notifyerror = (message) => toast.error(message);
@@ -25,7 +25,6 @@ const notifysuccess = (message) => toast.success(message);
       const OTP = Math.floor(Math.random() * 9000 + 1000);
       console.log("OTP", OTP);
       setOTP(OTP);
-
       axios
         .post("http://localhost:30084/send_recovery_email", {
           OTP,

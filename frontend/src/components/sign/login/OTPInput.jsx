@@ -17,14 +17,13 @@ export default function OTPVerification() {
   const notifyerror = (message) => toast.error(message);
   const notifysuccess = (message) => toast.success(message);
 
-  const resendOTP = () => {
+  const resendOTP = ({setEmail}) => {
     if (disable) return;
 
     axios
-      .post("http://localhost:5000/send_recovery_email", {
+      .post("http://localhost:30084/send_recovery_email", {
         OTP: otp,
         recipient_email: email,
-        
       })
       .then(() => {
         setDisable(true);
@@ -37,6 +36,7 @@ export default function OTPVerification() {
   const verifyOTP = () => {
     if (parseInt(OTPinput) === otp) {
       setPage("reset");
+      setEmail();
       return;
     }
     notifyerror(
