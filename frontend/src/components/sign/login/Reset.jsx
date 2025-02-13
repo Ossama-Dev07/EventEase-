@@ -39,7 +39,7 @@ export default function Reset() {
       })
       .then(() => {
         notifysuccess("password changed successfully");
-        setPage("recovered");
+        setPage("login");
       })
       .catch((error) => notifyerror(error));
   }

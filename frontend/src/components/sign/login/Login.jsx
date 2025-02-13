@@ -40,7 +40,7 @@ export function Login() {
 
   return (
     <Card className="lg:min-h-[300px]  xl:min-h-[500px]">
-     
+     <ToastContainer />
       <CardHeader>
         <CardTitle className="text-2xl text-[#1565c0]">Login</CardTitle>
         <CardDescription>

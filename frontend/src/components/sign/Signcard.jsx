@@ -16,7 +16,7 @@ export function Signcard() {
   const { type } = location.state || {};
   const [activeTab, setActiveTab] = useState(type || "login");
   const { page } = useContext(RecoveryContext);
-  const{email,setEmail}=useState("")
+
   useEffect(() => {
     if (type) {
       setActiveTab(type);
@@ -25,7 +25,6 @@ export function Signcard() {
     }
   }, [type]);
 
-  console.log("hellllo"+page)
   function RecoveryComponents() {
     if(page==="verifyEmail") return <VerifyEmail /> 
     if (page === "otp") return <OTPInput />;

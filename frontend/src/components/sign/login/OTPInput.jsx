@@ -10,14 +10,14 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 
 export default function OTPVerification() {
-  const { email, otp, setPage } = useContext(RecoveryContext);
+  const { setEmail, email, otp, setPage } = useContext(RecoveryContext);
   const [timerCount, setTimer] = useState(60);
   const [OTPinput, setOTPinput] = useState("");
   const [disable, setDisable] = useState(true);
   const notifyerror = (message) => toast.error(message);
   const notifysuccess = (message) => toast.success(message);
 
-  const resendOTP = ({setEmail}) => {
+  const resendOTP = () => {
     if (disable) return;
 
     axios
@@ -36,7 +36,6 @@ export default function OTPVerification() {
   const verifyOTP = () => {
     if (parseInt(OTPinput) === otp) {
       setPage("reset");
-      setEmail();
       return;
     }
     notifyerror(

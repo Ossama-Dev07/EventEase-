@@ -236,10 +236,11 @@ app.post("/send_recovery_email", (req, res) => {
 });
 app.post('/reset_password', async (req, res) => {
   try {
-    const { email, newpassword } = req.body;
-
+    const { recipient_email, newpassword } = req.body;
+    // const user = User.find()
+    // console.log(user)
     const hashedPassword = await bcrypt.hash(newpassword, 10);
-     updated=await User.updateOne({ email }, { $set: { password: hashedPassword } });
+     updated=await User.updateOne({ email:recipient_email }, { $set: { password: hashedPassword } });
 
     res.json({ message: "Password updated successfully" });
 
