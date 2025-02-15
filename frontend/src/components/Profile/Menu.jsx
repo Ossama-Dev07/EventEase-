@@ -53,26 +53,35 @@ export default function Menu(userData) {
                 alt="avatar"
                 className="h-10 w-10"
               />
-              <div className="flex flex-col items-start">
-                <Typography
-                  variant="h6"
-                  color={`${theme === "light" ? "black" : "white"}`}
-                >
-                  {userData.userData?.username}
-                </Typography>
-                <Typography
-                  variant="small"
-                  color={`${theme === "light" ? "gray" : "white"}`}
-                  className="font-normal"
-                >
-                  {userData.userData?.email}
-                </Typography>
-              </div>
             </div>
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent className="w-[250px]">
+        <DropdownMenuContent className="w-[280px]">
+          <div className="flex items-center gap-3 ">
+            <Avatar
+              src="https://docs.material-tailwind.com/img/face-2.jpg"
+              alt="avatar"
+              className="h-10 w-10"
+            />
+            <div className="flex flex-col items-start">
+              <Typography
+                variant="h6"
+                color={`${theme === "light" ? "black" : "white"}`}
+              >
+                {userData.userData?.username}
+              </Typography>
+              <Typography
+                variant="small"
+                color={`${theme === "light" ? "gray" : "white"}`}
+                className="font-normal"
+              >
+                {userData.userData?.email}
+              </Typography>
+            </div>
+          </div>
+
+          <DropdownMenuSeparator />
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
 
@@ -112,10 +121,9 @@ export default function Menu(userData) {
       </DropdownMenu>
 
       {/* Sheet for Profile */}
-          <div />
+      <div />
       <Sheet open={openProfile} onOpenChange={setOpenProfile}>
-        <SheetTrigger asChild>
-        </SheetTrigger>
+        <SheetTrigger asChild></SheetTrigger>
         <SheetContent>
           <Profile User={userData} />
         </SheetContent>
