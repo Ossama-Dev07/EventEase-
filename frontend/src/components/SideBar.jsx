@@ -16,7 +16,6 @@ import logoD from "../assets/logoD.png";
 
 import { Moon, Sun } from "lucide-react";
 
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,6 +35,9 @@ function SideBar() {
   const { theme } = useTheme();
 
   axios.defaults.withCredentials = true;
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   const handleSignup = () => {
     navigate("/signcard", {
@@ -56,7 +58,6 @@ function SideBar() {
       const res = await axios.get("http://localhost:30084/user");
       setUserData(res.data.user);
       setLogged(res.data.valid);
-      
     } catch (err) {
       console.error("Error fetching data:", err);
     } finally {
@@ -65,7 +66,7 @@ function SideBar() {
   };
   useEffect(() => {
     fetchData();
-    
+
     const handleResize = () => window.innerWidth >= 960 && setOpenNav(false);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -242,26 +243,18 @@ function SideBar() {
             </svg>
           )}
         </IconButton>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button  size="icon">
-              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-              <span className="sr-only">Toggle theme</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>
-              Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>
-              Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
-              System
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button
+          size="icon"
+          onClick={toggleTheme}
+          className="relative rounded-full h-11 w-11 p-2 bg-[#000826] dark:bg-white"
+        >
+          <Sun className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 dark:fill-blue-400" />
+
+          <Moon className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+
+          {/* Screen reader text */}
+          <span className="sr-only">Toggle theme</span>
+        </Button>
       </div>
       <MobileNav open={openNav}>
         <div className="container mx-auto">

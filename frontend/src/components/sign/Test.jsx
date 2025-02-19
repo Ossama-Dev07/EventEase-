@@ -44,7 +44,7 @@ const Home = () => {
     formData.append("password", userData.password);
 
     if (image) {
-      formData.append("image", image); // Append image as binary
+      formData.append("image", image); 
     }
     for (let pair of formData.entries()) {
       console.log(pair[0] + ": " + pair[1]);
